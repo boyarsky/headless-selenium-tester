@@ -2,8 +2,11 @@ package com.infoq.selenium;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
@@ -12,10 +15,25 @@ import java.util.stream.Collectors;
 
 public class HtmlUnitSeleniumIT {
 
+    protected WebDriver driver;
+
+    // ----------------------------------------------------
+
+    @BeforeEach
+    public final void connect() {
+        driver = new HtmlUnitDriver();
+        //driver.setJavascriptEnabled(true);
+    }
+
+    @AfterEach
+    public final void closeDriver() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+
     @Test
     void qconDates() {
-        HtmlUnitDriver driver = new HtmlUnitDriver();
-        //driver.setJavascriptEnabled(true);
         driver.get("https://www.infoq.com");
 
         // using var to make it obvious this is the Java 11 version

@@ -1,5 +1,7 @@
 package com.infoq.selenium;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -20,8 +22,12 @@ public class ChromeSeleniumIT {
     private static final boolean HEADLESS = true;
     private static final String CHROME_DRIVER_DIRECTORY = "chrome-driver";
 
-    @Test
-    void qconDates() {
+    protected WebDriver driver;
+
+    // ----------------------------------------------------
+
+    @BeforeEach
+    public final void connect() {
         Path chrome = Paths.get(CHROME_DRIVER_DIRECTORY + "/chromedriver");
         chrome.toFile().setExecutable(true);
         System.setProperty("webdriver.chrome.driver", chrome.toAbsolutePath().toString());
@@ -31,12 +37,22 @@ public class ChromeSeleniumIT {
             chromeOptions.addArguments("--headless");
         }
 
-        WebDriver driver = new ChromeDriver(chromeOptions);
+        driver = new ChromeDriver(chromeOptions);
 
         // https://github.com/seleniumhq/selenium-google-code-issue-archive/issues/27
         ((JavascriptExecutor) driver).executeScript("window.alert = function(msg) { }");
         ((JavascriptExecutor) driver).executeScript("window.confirm = function(msg) { }");
+    }
 
+    @AfterEach
+    public final void closeDriver() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+
+    @Test
+    void qconDates() {
         driver.get("https://www.infoq.com");
 
         // using var to make it obvious this is the Java 11 version
@@ -49,3 +65,4 @@ public class ChromeSeleniumIT {
 
     }
 }
+
