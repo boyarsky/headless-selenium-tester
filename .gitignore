@@ -21,3 +21,11 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# maven and ide files
+*/target/*
+.idea/
+*.iml
+
+# don't distrubte chrome driver
+*/chrome-driver/chromedriver
