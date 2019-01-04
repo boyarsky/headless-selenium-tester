@@ -6,16 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ChromeSeleniumIT {
 
@@ -55,12 +54,11 @@ public class ChromeSeleniumIT {
     void qconDates() {
         driver.get("https://www.infoq.com");
 
-        WebElement qcon = driver.findElement(By.className("qcon"));
-        Set<String> cities = qcon.findElements(By.tagName("strong"))
+        Set<String> newYorkCity = driver.findElements(By.className("qcon"))
                 .stream()
-                .map(WebElement::getText)
+                .map(element -> element.getAttribute("innerText"))
+                .filter(city -> city.trim().startsWith("New York"))
                 .collect(Collectors.toSet());
-        assertTrue(cities.contains("New York"), "New York is an upcoming city: " + cities);
-
+        assertEquals(1, newYorkCity.size(), "New York is an upcoming city");
     }
 }

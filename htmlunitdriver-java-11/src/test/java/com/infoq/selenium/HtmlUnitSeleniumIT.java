@@ -7,10 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class HtmlUnitSeleniumIT {
@@ -37,12 +35,12 @@ public class HtmlUnitSeleniumIT {
         driver.get("https://www.infoq.com");
 
         // using var to make it obvious this is the Java 11 version
-        var qcon = driver.findElement(By.className("qcon"));
-        var cities = qcon.findElements(By.tagName("strong"))
+        var newYorkCity = driver.findElements(By.className("qcon"))
                 .stream()
-                .map(WebElement::getText)
+                .map(element -> element.getAttribute("innerText"))
+                .filter(city -> city.trim().startsWith("New York"))
                 .collect(Collectors.toSet());
-        assertTrue(cities.contains("New York"), "New York is an upcoming city: " + cities);
+        assertEquals(1, newYorkCity.size(), "New York is an upcoming city");
 
     }
 }
